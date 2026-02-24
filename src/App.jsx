@@ -2,70 +2,52 @@ import { useState, useEffect } from "react";
 import "./App.css";
 
 function App() {
-  const [products, setProducts] = useState([]);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    fetch("https://dummyjson.com/products")
+    fetch("https://dummyjson.com/users")
       .then((res) => res.json())
-      .then((data) => {
-        // 1️⃣ Filter products price >= 10
-        const filteredProducts = data.products.filter(
-          (prod) => prod.price >= 10
-        );
-        setProducts(filteredProducts);
-      })
+      .then((data) => setUsers(data.users))
       .catch((err) => console.error(err));
-  }, []); // ⚠️ Important: Empty dependency array
+  }, []);
 
   return (
-    <>
-      <h2>Products List (Price ≥ 10)</h2>
+    <div>
+      <h2>Users Profile Table</h2>
 
-      <table border="2" cellPadding="10">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Price (₹)</th>
-            <th>Rating</th>
-            <th>Return Policy</th>
-            <th>Shipping Info</th>
-            <th>Thumbnail</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {products.map((prod) => (
-            <tr key={prod.id}>
-              <td>{prod.id}</td>
-              <td>{prod.title}</td>
-              <td>₹ {prod.price}</td>
-              <td>{prod.rating}</td>
-
-              {/* 3️⃣ Added Return & Shipping */}
-              <td>{prod.returnPolicy || "7 Days Return Available"}</td>
-              <td>{prod.shippingInformation || "Free Shipping"}</td>
-
-              {/* 2️⃣ Thumbnail opens in new tab */}
-              <td>
-                <a
-                  href={prod.thumbnail}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <img
-                    src={prod.thumbnail}
-                    alt={prod.title}
-                    width="60"
-                    style={{ cursor: "pointer" }}
-                  />
-                </a>
-              </td>
+      {/* BOX CONTAINER */}
+      <div className="table-wrapper">
+        <table className="users-table">
+          <thead>
+            <tr>
+              <th>Photo</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Gender</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Age</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </>
+          </thead>
+
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.id}>
+                <td>
+                  <img src={user.image} alt={user.firstName} />
+                </td>
+                <td>{user.firstName}</td>
+                <td>{user.lastName}</td>
+                <td>{user.gender}</td>
+                <td>{user.email}</td>
+                <td>{user.phone}</td>
+                <td>{user.age}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 }
 
